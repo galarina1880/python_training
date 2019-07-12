@@ -9,10 +9,13 @@ class TestAddGroup(unittest.TestCase):
         self.wd = webdriver.Chrome()
         self.wd.implicitly_wait(30)
 
-    def open_hp(self, wd):
+    def open_hp(self):
+        wd = self.wd
         wd.get("http://localhost:8080/addressbook/")
 
-    def login(self, wd, username, password):
+    def login(self, username, password):
+        wd = self.wd
+        self.open_hp()
         wd.find_element_by_name("user").click()
         wd.find_element_by_name("user").clear()
         wd.find_element_by_name("user").send_keys(username)
@@ -21,10 +24,12 @@ class TestAddGroup(unittest.TestCase):
         wd.find_element_by_name("pass").send_keys(password)
         wd.find_element_by_xpath("//input[@value='Login']").click()
 
-    def open_groups_page(self, wd):
+    def open_groups_page(self):
         wd.find_element_by_link_text("groups").click()
 
-    def create_group(self, wd, group):
+    def create_group(self, group):
+        wd = self.wd
+        self.open_groups_page()
         # open new group form
         wd.find_element_by_name("new").click()
         # fill out create group form
@@ -39,27 +44,21 @@ class TestAddGroup(unittest.TestCase):
         wd.find_element_by_name("group_footer").send_keys(group.footer)
         # submit new group creation
         wd.find_element_by_name("submit").click()
+        self.open_groups_page()
 
-    def logout(self, wd):
+    def logout(self):
+        wd = self.wd
         wd.find_element_by_link_text("Logout").click()
 
     def test_add_group(self):
-        wd = self.wd
-        self.open_hp(wd)
-        self.login(wd, username="admin", password="secret")
-        self.open_groups_page(wd)
-        self.create_group(wd, Group(name="test", header="headr", footer="footr"))
-        self.open_groups_page(wd)
-        self.logout(wd)
+        self.login(username="admin", password="secret")
+        self.create_group(Group(name="test", header="headr", footer="footr"))
+        self.logout()
 
     def test_add_empty_group(self):
-        wd = self.wd
-        self.open_hp(wd)
-        self.login(wd, username="admin", password="secret")
-        self.open_groups_page(wd)
-        self.create_group(wd, Group(name="", header="", footer=""))
-        self.open_groups_page(wd)
-        self.logout(wd)
+        self.login(username="admin", password="secret")
+        self.create_group(Group(name="", header="", footer=""))
+        self.logout()
 
     def tearDown(self):
         self.wd.quit()
