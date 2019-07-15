@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from fixture.session import SessionHelper
+from fixture.group import GroupHelper
 
 
 class Application:
@@ -9,33 +10,12 @@ class Application:
         self.wd = webdriver.Chrome()
         self.wd.implicitly_wait(30)
         self.session = SessionHelper(self)
+        self.group = GroupHelper(self)
 
     def open_hp(self):
         wd = self.wd
         wd.get("http://localhost:8080/addressbook/")
 
-    def open_groups_page(self):
-        wd = self.wd
-        wd.find_element_by_link_text("groups").click()
-
-    def create_group(self, group):
-        wd = self.wd
-        self.open_groups_page()
-        # open new group form
-        wd.find_element_by_name("new").click()
-        # fill out create group form
-        wd.find_element_by_name("group_name").click()
-        wd.find_element_by_name("group_name").clear()
-        wd.find_element_by_name("group_name").send_keys(group.name)
-        wd.find_element_by_name("group_header").click()
-        wd.find_element_by_name("group_header").clear()
-        wd.find_element_by_name("group_header").send_keys(group.header)
-        wd.find_element_by_name("group_footer").click()
-        wd.find_element_by_name("group_footer").clear()
-        wd.find_element_by_name("group_footer").send_keys(group.footer)
-        # submit new group creation
-        wd.find_element_by_name("submit").click()
-        self.open_groups_page()
 
     def go_to_hp(self):
         wd = self.wd
