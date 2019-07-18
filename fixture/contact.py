@@ -93,7 +93,7 @@ class ContactHelper:
         wd = self.app.wd
         # open contact for modification
         text = 'edit'
-        wd.find_element_by_title("Edit")
+        wd.find_element_by_xpath('//a[contains(@href, "%s")]' % text).click()
         # modify contact
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
