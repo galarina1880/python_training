@@ -48,7 +48,7 @@ class ContactHelper:
 
     def submit_form(self):
         wd = self.app.wd
-        wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
+        wd.find_elements_by_xpath("(//input[@value='Update'])")[1].click()
 
     def create(self, contact):
         wd = self.app.wd
@@ -67,8 +67,9 @@ class ContactHelper:
     def modify(self, contact):
         wd = self.app.wd
         # open contact for modification
-        text = 'edit'
-        wd.find_element_by_xpath('//a[contains(@href, "%s")]' % text).click()
+        self.app.go_to_hp()
+        # text = 'edit'
+        wd.find_elements_by_xpath('//*[@id="maintable"]/tbody/tr[2]/td[8]/a')[0].click()
         # modify contact
         self.fill_contact_form(contact)
         self.submit_form()
