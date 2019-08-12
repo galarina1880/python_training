@@ -50,12 +50,15 @@ class ContactHelper:
         wd = self.app.wd
         wd.find_elements_by_xpath("(//input[@value='Update'])")[1].click()
 
+    contact_cache = None
+
     def create(self, contact):
         wd = self.app.wd
         wd.find_element_by_link_text("add new").click()
         self.fill_contact_form(contact)
         self.submit_form()
         self.app.go_to_hp()
+        self.contact_cache = None
 
     def delete(self):
         wd = self.app.wd
@@ -63,6 +66,7 @@ class ContactHelper:
         wd.find_element_by_xpath('//*[@id="content"]/form[2]/div[2]/input').click()
         wd.switch_to_alert().accept()
         self.app.go_to_hp()
+        self.contact_cache = None
 
     def modify(self, contact):
         wd = self.app.wd
@@ -74,6 +78,7 @@ class ContactHelper:
         self.fill_contact_form(contact)
         self.submit_form()
         self.app.go_to_hp()
+        self.contact_cache = None
 
     def count(self):
         wd = self.app.wd
@@ -84,9 +89,9 @@ class ContactHelper:
         wd = self.app.wd
         self.app.go_to_hp()
         wd.find_element_by_id("search_count")
-        contacts = []
+        self.contact_cache = []
         for element in wd.find_elements_by_name("entry"):
             value = element.find_element_by_name("selected[]").get_attribute("value")
             id = element.find_element_by_name("selected[]").get_attribute("id")
-            contacts.append(Contact(value=value, id=id))
-        return contacts
+            self.contact_cache.append(Contact(value=value, id=id))
+        return list(self.contact_cache)
