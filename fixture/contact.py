@@ -46,7 +46,11 @@ class ContactHelper:
         self.change_field_value("phone2", contact.phone2)
         self.change_field_value("notes", contact.notes)
 
-    def submit_form(self):
+    def submit_form_create(self):
+        wd = self.app.wd
+        wd.find_elements_by_xpath("(//input[@value='Enter'])")[1].click()
+
+    def submit_form_modify(self):
         wd = self.app.wd
         wd.find_elements_by_xpath("(//input[@value='Update'])")[1].click()
 
@@ -56,7 +60,7 @@ class ContactHelper:
         wd = self.app.wd
         wd.find_element_by_link_text("add new").click()
         self.fill_contact_form(contact)
-        self.submit_form()
+        self.submit_form_create()
         self.app.go_to_hp()
         self.contact_cache = None
 
@@ -76,7 +80,7 @@ class ContactHelper:
         wd.find_elements_by_xpath('//*[@id="maintable"]/tbody/tr[2]/td[8]/a')[0].click()
         # modify contact
         self.fill_contact_form(contact)
-        self.submit_form()
+        self.submit_form_modify()
         self.app.go_to_hp()
         self.contact_cache = None
 
