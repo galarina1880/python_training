@@ -65,8 +65,11 @@ class ContactHelper:
         self.contact_cache = None
 
     def delete(self):
+        self.delete_by_index(0)
+
+    def delete_by_index(self, index):
         wd = self.app.wd
-        wd.find_element_by_name('selected[]').click()
+        wd.find_elements_by_name('selected[]')[index].click()
         wd.find_element_by_xpath('//*[@id="content"]/form[2]/div[2]/input').click()
         wd.switch_to_alert().accept()
         self.app.go_to_hp()
@@ -78,6 +81,17 @@ class ContactHelper:
         self.app.go_to_hp()
         # text = 'edit'
         wd.find_elements_by_xpath('//*[@id="maintable"]/tbody/tr[2]/td[8]/a')[0].click()
+        # modify contact
+        self.fill_contact_form(contact)
+        self.submit_form_modify()
+        self.app.go_to_hp()
+        self.contact_cache = None
+
+    def modify_by_index(self, index, contact):
+        wd = self.app.wd
+        # open contact for modification
+        self.app.go_to_hp()
+        wd.find_elements_by_xpath('//*[@id="maintable"]/tbody/tr[2]/td[8]/a')[index].click()
         # modify contact
         self.fill_contact_form(contact)
         self.submit_form_modify()
